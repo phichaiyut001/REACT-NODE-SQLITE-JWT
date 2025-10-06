@@ -12,7 +12,12 @@ logs/
 .DS_Store
 Thumbs.db
 
+
 # Build / cache
 dist/
 build/
 .cache/
+
+.db
+.sqlite
+.sqlite3
