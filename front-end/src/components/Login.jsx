@@ -1,29 +1,16 @@
 import React from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function Register() {
+function Login() {
   //สร้าง state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
   const handlesubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await axios.post("http://localhost:8000/register", {
-        username,
-        password,
-      });
-      setMessage(response.data.message);
-
-      navigate("/login");
-    } catch (error) {
-      setMessage(error.response.data.message);
-    }
   };
 
   return (
@@ -32,7 +19,7 @@ function Register() {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h2 className="card-title text-center mt-4">Register</h2>
+              <h2 className="card-title text-center mt-4">Login</h2>
               <form onSubmit={handlesubmit}>
                 <div className="mb-3">
                   <label htmlFor="username" className="from-lable">
@@ -58,8 +45,8 @@ function Register() {
                     required
                   />
                 </div>
-                <button type="submit" className="btn btn-primary w-100">
-                  Register
+                <button type="submit" className="btn btn-success w-100">
+                  Login
                 </button>
               </form>
 
@@ -67,7 +54,7 @@ function Register() {
                 <p className="mt-3 text-center text-danger">{message}</p>
               )}
               <p className="mt-3 text-center">
-                Already have an account? <Link to="/login">Login here</Link>
+                Don't have an account? <Link to="/register">Register here</Link>
               </p>
             </div>
           </div>
@@ -77,4 +64,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
