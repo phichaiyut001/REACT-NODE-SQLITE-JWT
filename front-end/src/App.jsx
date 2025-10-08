@@ -1,6 +1,4 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -10,6 +8,8 @@ import {
 } from "react-router-dom";
 import Register from "./components/register";
 import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import ProtectedRoute from "./Protectedroute";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,6 +21,10 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
         </Routes>
       </div>
     </Router>

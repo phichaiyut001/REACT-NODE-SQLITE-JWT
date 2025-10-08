@@ -1,6 +1,6 @@
 import React from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import axios, { Axios } from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function Login() {
@@ -8,9 +8,23 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handlesubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:8000/login", {
+        username,
+        password,
+      });
+      localStorage.setItem("token", response.data.token);
+      setMessage(response.data.message);
+
+      navigate("/dashboard");
+    } catch (error) {
+      setMessage(error.response.data.message);
+    }
   };
 
   return (
@@ -51,7 +65,7 @@ function Login() {
               </form>
 
               {message && (
-                <p className="mt-3 text-center text-danger">{message}</p>
+                <p className="mt-3 text-center text-success">{message}</p>
               )}
               <p className="mt-3 text-center">
                 Don't have an account? <Link to="/register">Register here</Link>

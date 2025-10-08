@@ -31,6 +31,31 @@ db.run(` CREATE TABLE IF NOT EXISTS users (
     password TEXT
   )`);
 
+//midleware for veriry jwt
+const veriryToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token == null) {
+    return res.sendStatus(401);
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+    req.user = user;
+    next();
+  });
+};
+
+//protected Dashboard
+app.get("/api/dashboard", veriryToken, (req, res) => {
+  const username = req.user.username;
+
+  res.json({ message: `Welcome to your Dashboard, ${username}` });
+});
+
 //สร้าง API Endpoints
 
 //Register Endpoints
@@ -57,6 +82,33 @@ app.post("/register", async (req, res) => {
     res
       .status(201)
       .json({ message: "user register successfully", userId: this.lastID });
+  });
+});
+
+//Login Endpoint
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  const sql = `SELECT * FROM users WHERE username = ? `;
+
+  db.get(sql, [username], async (err, user) => {
+    if (err) {
+      return res.status(500).json({ message: "Server Error" });
+    }
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.json({ message: "Login successfully", token });
   });
 });
 
