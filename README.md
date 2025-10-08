@@ -8,6 +8,7 @@
 โปรเจกต์ตัวอย่างระบบเว็บแอปที่ใช้ React (frontend) + Node.js (backend) + SQLite เป็นฐานข้อมูล พร้อมระบบรับรองตัวตนด้วย JWT (JSON Web Token)
 
 REACT-NODE-SQLITE-JWT/
+
 ├── back-end/ # โค้ดฝั่งเซิร์ฟเวอร์ (Node.js / Express)
 
 ├── front-end/ # โค้ดฝั่งไคลเอนต์ (React)
@@ -64,3 +65,9 @@ npm start
 | POST   | `/api/login`     | เข้าสู่ระบบ                     | ❌    |
 | GET    | `/api/profile`   | ดึงข้อมูลผู้ใช้                 | ✅    |
 | GET    | `/api/protected` | ตัวอย่าง route ที่ต้องใช้ token | ✅    |
+
+| Table                 | Fields                            | Description                |
+| --------------------- | --------------------------------- | -------------------------- |
+| `users`               | `id`, `username`, `password_hash` | เก็บข้อมูลผู้ใช้           |
+| `tokens` *(optional)* | `id`, `user_id`, `token`          | เก็บ refresh token (ถ้ามี) |
+
